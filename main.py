@@ -68,7 +68,7 @@ def physics_process():
                 e = Enemy(50, -5, random.randrange(0,screen_width), random.randrange(0,screen_height))
                 enemies.append(e)
 
-            start()
+            lost()
 
 def draw():
     pygame.draw.rect(screen, LIGHT_GREEN, (0,0,screen_width, screen_height))
@@ -76,6 +76,38 @@ def draw():
 
     for e in enemies:
         pygame.draw.rect(screen, RED, (e.x, e.y, e.size, e.size))
+
+def lost():
+    lost_running = True
+    while lost_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+
+        # Fill the screen with white
+        screen.fill(RED)
+
+        text_surface = font.render("You lost", True, WHITE)
+        text_rect = text_surface.get_rect(center=(screen_width/2, screen_height/2))
+        text_surface_small = small_font.render("Press Space to play again", True, WHITE)
+        text_rect_small = text_surface_small.get_rect(center=(screen_width/2, (screen_height/2)+50))
+        screen.blit(text_surface, text_rect)
+        screen.blit(text_surface_small, text_rect_small)
+        # Get the state of all keyboard buttons
+        keys = pygame.key.get_pressed()
+        
+        # Move the square based on arrow key presses
+        if keys[pygame.K_SPACE]:
+            game()
+
+
+        clock.tick(FPS)
+
+
+        # Update the display
+        pygame.display.flip()
 
 def start():
     start_running = True
